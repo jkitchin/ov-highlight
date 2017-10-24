@@ -1,6 +1,6 @@
 ;;; ov-highlighter.el --- Highlight text with overlays  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  John Kitchin
+;; Copyright (C) 2016, 2017  John Kitchin
 
 ;; Author: John Kitchin <jkitchin@andrew.cmu.edu>
 ;; URL: https://github.com/jkitchin/scimax/ov-highlighter.el
@@ -715,9 +715,6 @@ get lost when you cut overlays."
 	(ov-highlight-copy beg end)
       (apply orig-func args))))
 
-(advice-add 'kill-ring-save :around 'ov-highlight-copy-advice)
-;; (advice-remove 'kill-ring-save 'ov-highlight-copy-advice)
-
 
 ;; *** cut advice
 
@@ -733,8 +730,6 @@ get lost when you cut overlays."
 	       (setf (buffer-substring beg end) "")) 
       (apply orig-func args))))
 
-(advice-add 'kill-region :around 'ov-highlight-cut-advice)
-;; (advice-remove 'kill-region 'ov-highlight-cut-advice)
 
 ;; *** Paste advice
 
@@ -744,8 +739,6 @@ get lost when you cut overlays."
       (ov-highlight-paste) 
     (apply orig-func args)))
 
-(advice-add 'yank :around 'ov-highlight-paste-advice)
-;; (advice-remove 'yank 'ov-highlight-paste-advice)
 
 ;; *** kill line advice
 (defun ov-highlight-kill-line-advice (orig-func &rest args)
@@ -761,8 +754,29 @@ get lost when you cut overlays."
 	(setf (buffer-substring (line-beginning-position) (line-end-position)) ""))
     (apply orig-func args)))
 
-(advice-add 'kill-visual-line :around 'ov-highlight-kill-line-advice)
-;; (advice-remove 'kill-visual-line 'ov-highlight-kill-line-advice)
+
+(defun ov-highlighter-cut-copy-paste-on ()
+  "Turn advices for cut/copy/paste/kill on.
+Note: if this causes bad behavior use
+`ov-highlighter-cut-copy-paste-off' to remove the advices."
+  (interactive)
+  (advice-add 'kill-ring-save :around 'ov-highlight-copy-advice) 
+  (advice-add 'kill-region :around 'ov-highlight-cut-advice) 
+  (advice-add 'yank :around 'ov-highlight-paste-advice) 
+  (advice-add 'kill-visual-line :around 'ov-highlight-kill-line-advice))
+
+
+(defun ov-highlighter-cut-copy-paste-off () 
+  "Turn advices for cut/copy/paste/kill off."
+  (interactive)
+  (advice-remove 'kill-visual-line 'ov-highlight-kill-line-advice)
+  (advice-remove 'yank 'ov-highlight-paste-advice)
+  (advice-remove 'kill-region 'ov-highlight-cut-advice)
+  (advice-remove 'kill-ring-save 'ov-highlight-copy-advice))
+
+;; On by default
+(ov-highlighter-cut-copy-paste-on)
+
 
 ;; * HTML
 
