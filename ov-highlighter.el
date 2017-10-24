@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016, 2017  John Kitchin
 
 ;; Author: John Kitchin <jkitchin@andrew.cmu.edu>
-;; URL: https://github.com/jkitchin/scimax/ov-highlighter.el
+;; URL: https://github.com/jkitchin/ov-highlighter
 
 ;; Version: 0.1.0
 ;; Keywords:  highlight
