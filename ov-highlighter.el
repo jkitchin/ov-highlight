@@ -7,7 +7,7 @@
 
 ;; Version: 0.1.0
 ;; Keywords:  highlight
-;; Package-Requires: ((hydra "0.13.2") (dash) (s))
+;; Package-Requires: ((hydra) (dash) (s))
 ;; This file is not currently part of GNU Emacs.
 
 ;; This program is free software; you can redistribute it and/or
