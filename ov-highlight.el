@@ -349,6 +349,7 @@ point. With numeric prefix ARG set font to that size."
 	ov))))
 
 
+;;;###autoload
 (defun ov-highlight-decrease-font-size (&optional arg)
   "Decrease the font size of the overlay at point.
 When no overlay is at the point make one for the region or word
