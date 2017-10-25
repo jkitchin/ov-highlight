@@ -62,21 +62,30 @@
 ;; Define your own custom highlight functions with `ov-highlight-make'. See the
 ;; predefined functions for examples.
 
-;; ov-highlighter uses a local save-buffer-hook to update the data when you save
+;; ov-highlight uses a local save-buffer-hook to update the data when you save
 ;; the buffer. It also uses local file variables to load the highlights when you
 ;; open the file. The data is saved in a single line. I don't know what the
 ;; limitation of this is.
 
-;; Known issues: You cannot cut and paste these highlights. Fixing this would
-;; involve changing the kill and yank functions to capture overlays in the kill
-;; region, and remake them in the yanked region.
+;; Known issues: You cannot export the highlights in org-mode.
 
 (require 'hydra)
 (require 'ov)
+(require 'flyspell)
+
 
 ;;; Code:
 (defvar ov-highlight-data nil
   "Contains highlight data. Normally set as a local file variable.")
+
+
+(defvar ov-highlight-source nil
+  "A cons cell of the buffer to get highlights from.")
+
+
+(defvar ov-highlight-window-configuration nil
+  "Stores the window configuration.")
+
 
 (defmacro ov-highlight-make (label face &rest properties)
   "Create a user-defined highlight function.
@@ -94,7 +103,8 @@ no arguments."
      (add-hook 'before-save-hook 'ov-highlight-save nil t)
      (let ((face ,face)
 	   (properties (quote ,properties))
-	   (bounds (bounds-of-thing-at-point 'word)))
+	   (bounds (bounds-of-thing-at-point 'word))
+	   prop val)
        (if (and  (ov-at) (overlay-get (ov-at) 'ov-highlighter))
 	   ;; add face properties to current overlay face properties.
 	   (let* (;; (current-properties (overlay-properties (ov-at)))
@@ -103,8 +113,7 @@ no arguments."
 					   if v
 					   append
 					   (list p v))
-			cf))
-		  prop val)
+			cf)))
 	     (while face
 	       (setq prop (pop face)
 		     val (pop face))
@@ -417,14 +426,6 @@ They are really deleted when you save the buffer."
 The list is from first to last."
   (reverse (-filter (lambda (ov) (overlay-get ov 'ov-highlighter))
 		    (overlays-in (point-min) (point-max)))))
-
-
-(defvar ov-highlight-source nil
-  "A cons cell of the buffer to get highlights from.")
-
-
-(defvar ov-highlight-window-configuration nil
-  "Stores the window configuration.")
 
 
 (defun ov-highlight-display ()
