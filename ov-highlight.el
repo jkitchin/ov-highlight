@@ -67,7 +67,15 @@
 ;; open the file. The data is saved in a single line. I don't know what the
 ;; limitation of this is.
 
-;; Known issues: You cannot export the highlights in org-mode.
+;; Known issues:
+;; 
+;; 1. You cannot export the highlights in org-mode. They are not part of the
+;; org-markup.
+;; 
+;; 2. If you refile a heading with highlights, you will lose the highlights.
+;; 
+;; 3. If you reorder the headings (other than by copy and paste) you will lose
+;; the highlights.
 
 (require 'hydra)
 (require 'ov)
