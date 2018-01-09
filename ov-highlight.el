@@ -816,6 +816,20 @@ Note: if this causes bad behavior use
     (kill-buffer buf)
     (browse-url file)))
 
+(defun ov-highlight-html-region (r1 r2 file)
+  "Convert the region to html using htmlize and write to FILE."
+  (interactive (if (region-active-p)
+		   (list (region-beginning)
+			 (region-end)
+			 (read-file-name
+			  "File: " nil (concat (file-name-base) ".html")))
+		 (error "No active region.")))
+  (let ((buf (htmlize-region r1 r2))) 
+    (with-current-buffer buf
+      (write-file file (buffer-string) nil))
+    (kill-buffer buf)
+    (browse-url file)))
+
 
 ;; * The End
 (provide 'ov-highlight)
