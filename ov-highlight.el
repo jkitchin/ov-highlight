@@ -68,12 +68,12 @@
 ;; limitation of this is.
 
 ;; Known issues:
-;; 
+;;
 ;; 1. You cannot export the highlights in org-mode. They are not part of the
 ;; org-markup.
-;; 
+;;
 ;; 2. If you refile a heading with highlights, you will lose the highlights.
-;; 
+;;
 ;; 3. If you reorder the headings (other than by copy and paste) you will lose
 ;; the highlights.
 
@@ -141,7 +141,7 @@ no arguments."
 	   (while properties
 	     (setq prop (pop properties)
 		   val (pop properties))
-	     
+
 	     (overlay-put ov prop (if (functionp val)
 				      (funcall val)
 				    val)))
@@ -184,14 +184,9 @@ no arguments."
 (ov-highlight-make "insert" '(:foreground "blue"))
 
 ;; A user-selected color
-(ov-highlight-make "color" (lambda ()
-			       (list :background
-				     (plist-get
-				      (get-text-property
-				       0 'face
-				       (completing-read
-					"Color: "
-					(progn
+(ov-highlight-make "color"
+		   (lambda ()
+		     (let* ((candidates (progn
 					  (save-selected-window
 					    (list-colors-display))
 					  (prog1
@@ -200,8 +195,16 @@ no arguments."
 							  (append (list line)
 								  (s-split " " line t)))
 							(s-split "\n" (buffer-string))))
-					    (kill-buffer "*Colors*")))))
-				      :background))))
+					    (kill-buffer "*Colors*"))))
+			    (choice (completing-read
+				     "Color: "
+				     candidates)))
+		       (list :background
+			     (plist-get
+			      (get-text-property
+			       0 'face
+			       (car (cdr (assoc choice candidates))))
+			      :background)))))
 
 ;; Change font color
 (ov-highlight-make "foreground" (lambda ()
@@ -277,7 +280,7 @@ no arguments."
 					'local-map map)))
 
 			       (use-local-map (copy-keymap org-mode-map))
-			       
+
 			       ;; Cancel
 			       (local-set-key
 				(kbd "C-x k")
@@ -630,7 +633,7 @@ Data is saved in comment in the document."
 	  (insert (format
 		   "#  ov-highlight-data: %s\n\n"
 		   data-b64)))))
-    
+
     (unless data
       ;; cleanup if we have no highlights
       (remove-hook 'before-save-hook 'ov-highlight-save t)
@@ -675,7 +678,7 @@ _f_: foreground   _x_: box
   ;; editmark/feedback options
   ("t" ov-highlight-typo "Typo")
   ("m" ov-highlight-comment "Comment highlight")
-  
+
   ("l" ov-highlight-display "List highlights")
   ("k" ov-highlight-clear "Clear highlight")
   ("K" ov-highlight-clear-all "Clear all highlights")
@@ -824,7 +827,7 @@ Note: if this causes bad behavior use
 			 (read-file-name
 			  "File: " nil (concat (file-name-base) ".html")))
 		 (error "No active region.")))
-  (let ((buf (htmlize-region r1 r2))) 
+  (let ((buf (htmlize-region r1 r2)))
     (with-current-buffer buf
       (write-file file (buffer-string) nil))
     (kill-buffer buf)
