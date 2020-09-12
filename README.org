@@ -29,7 +29,7 @@ The library defines a macro =ov-make-highlight= to make your own highlights. The
 For example, here is the type highlight that puts a reddish background and tooltip on the highlight.
 
 #+BEGIN_SRC emacs-lisp
-(ov-make-highlight "typo" '(:background "PaleVioletRed1") help-echo "tpyo")
+(ov-highlight-make "typo" '(:background "PaleVioletRed1") help-echo "tpyo")
 #+END_SRC
 
 That macro creates the command =ov-highlight-typo=. See https://www.gnu.org/software/emacs/manual/html_node/elisp/Face-Attributes.html for details on setting face attributes. 
