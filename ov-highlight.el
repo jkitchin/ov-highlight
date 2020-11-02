@@ -413,7 +413,8 @@ at point. With numeric prefix ARG set font to that size."
   "Clear highlight at point."
   (interactive)
   (when-let (ov (ov-at))
-    (delete-overlay ov))
+    (delete-overlay ov)
+    (ov-clear (ov-beg (ov-at)) (ov-end (ov-at))))
 
   (set-buffer-modified-p t)
   (let ((buf (get-buffer "*ov-highlights*")))
