@@ -55,7 +55,7 @@ Highlights are basically fragile. There are many ways to mess them up.
 
 * Examples
 
-Note: These will not be visible without installing ov-highlight. See [[http://htmlpreview.github.com/?https://github.com/jkitchin/ov-highlighter/blob/master/README.html][README.html]] to see what they look like. Not all the markups convert to html, but most of them do. The tooltips are not preserved either.
+Note: These will not be visible without installing ov-highlight. See [[https://html-preview.github.io/?url=https://github.com/jkitchin/ov-highlight/blob/master/README.html][README.html]] to see what they look like. Not all the markups convert to html, but most of them do. The tooltips are not preserved either.
 
 - green
 - pink
